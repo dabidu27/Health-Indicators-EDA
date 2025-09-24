@@ -2,7 +2,11 @@ import pandas as pd
 import requests
 from pyjstat import pyjstat
 import json
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+excel_path = os.getenv('excel_path')
 def create_dataset():
     eu_countries = [
         "Austria",
@@ -85,7 +89,7 @@ def create_dataset():
 
     #CONFIDENCE IN VACCINATION
 
-    df = pd.read_excel(r"C:\Users\David\Desktop\utile\facultate\semestrul 1\statistica\1037_Adamita_David-Stefan_Cipariu_Mihnea_Adrian_David_Robert_Luca\1037_Adamita_David-Stefan_Cipariu_Mihnea_Adrian_David_Robert_Luca.xlsx", sheet_name='Data')
+    df = pd.read_excel(excel_path, sheet_name='Data')
     vaccination_confidence = df[['country', 'confidence in vaccination (percentage of population)']]
     vaccination_confidence = vaccination_confidence.rename(columns={'country': 'Geopolitical entity (reporting)', 'confidence in vaccination (percentage of population)': 'Confidence in Vaccination (Percentage of Population)'})
     #print(vaccination_confidence)
@@ -93,7 +97,7 @@ def create_dataset():
 
     #DEATH RATES
 
-    df = pd.read_excel(r"C:\Users\David\Desktop\utile\facultate\semestrul 1\statistica\1037_Adamita_David-Stefan_Cipariu_Mihnea_Adrian_David_Robert_Luca\1037_Adamita_David-Stefan_Cipariu_Mihnea_Adrian_David_Robert_Luca.xlsx", sheet_name='Data')
+    df = pd.read_excel(excel_path, sheet_name='Data')
     death_rates = df[['country', 'crude death rates(per 1000 persons)']]
     death_rates = death_rates.rename(columns={'country': 'Geopolitical entity (reporting)', 'crude death rates(per 1000 persons)': 'Crude Death Rates (Per 1000 Persons)'})
     #print(death_rates)
