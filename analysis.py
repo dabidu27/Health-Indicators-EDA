@@ -10,9 +10,11 @@ dataset = create_dataset()
 #GRAPHICAL PROJECTION OF THE DATA
 
 #barchart of life expectancy
-g = sns.catplot(x = 'Geopolitical entity (reporting)', y = 'Life Expectancy', data = dataset, kind ='bar')
+g = sns.catplot(x = 'Geopolitical entity (reporting)', y = 'Life Expectancy', data = dataset, kind ='bar', height = 8, aspect=1.5)
 g.set_xticklabels(rotation = 90)
 g.set_axis_labels('Country', 'Life expectancy (years)')
+
+g.fig.subplots_adjust(bottom=0.30, top=0.92)
 g.fig.suptitle('Life expectancy by country (2023)')
 
 plt.savefig('plots/life_expectancy.png', dpi = 300)
@@ -31,6 +33,8 @@ df_long = dataset.melt(
 
 g = sns.catplot(x = 'Geopolitical entity (reporting)', y = 'Value', hue = 'Indicator', data = df_long, kind = 'bar')
 g.set_xticklabels(rotation = 90)
+
+g.fig.subplots_adjust(bottom=0.30, top=0.92)
 g.fig.suptitle('Daily Smokers (% Population) VS Daily Alcohol Consumers (% Population) in EU Countries')
 
 plt.savefig('plots/smokers_vs_drinkers', dpi=300)
