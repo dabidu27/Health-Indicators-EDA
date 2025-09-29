@@ -2,11 +2,12 @@ import pandas as pd
 from dataset import create_dataset
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 
 dataset = create_dataset()
 #print(dataset)
 
-
+"""
 #GRAPHICAL PROJECTION OF THE DATA
 
 #barchart of life expectancy
@@ -159,4 +160,52 @@ axes[1].set_title((f'The Relationship between {col1} and {col2}'), fontsize=8, w
 
 plt.savefig('plots/scatter_plots', dpi = 300)
 plt.show()
+"""
 
+#BOX PLOTS AND OUTLIERS
+
+cols = dataset.select_dtypes(include = 'number').columns
+n_col = 3
+n_rows = (len(cols) + n_col - 1) // n_col
+
+fig, axes = plt.subplots(n_rows, n_col, figsize = (15, 5*n_rows))
+axes = axes.flatten()
+
+
+for i, col in enumerate(cols):
+
+    Q1 = dataset[col].quantile(0.25)
+    ME = dataset[col].median()
+    Q3 = dataset[col].quantile(0.75)
+
+    IQR = Q3 - Q1
+    
+    lower_fence = Q1 - 1.5 * IQR
+    upper_fence = Q3 + 1.5 * IQR
+
+    sns.boxplot(y = dataset[col], ax = axes[i])
+    axes[i].set_title(col)
+    axes[i].set_xlabel(col, fontsize=9)
+    axes[i].set_ylabel('')
+    plt.subplots_adjust(hspace= 0.5, wspace=0.3)
+    print(f'{col}: Q1 = {Q1}, ME = {ME}, Q3 = {Q3}, IQR = {IQR}, Lower Fence = {lower_fence}, Upper Fence = {upper_fence}')
+    # Annotate outliers
+    outliers = dataset['Geopolitical entity (reporting)'][(dataset[col] < lower_fence) | (dataset[col] > upper_fence)]
+    for idx, outlier in enumerate(outliers):
+        y_val = dataset[col].loc[dataset['Geopolitical entity (reporting)'] == outlier].values[0]
+        axes[i].annotate(f'{outlier}',
+                        xy=(0, y_val),
+                         xytext=(0.05, y_val + idx * 2),
+                        textcoords='data',
+                        fontsize=8,
+                        color='red',
+                        arrowprops=dict(arrowstyle='->', color='red', lw=0.8)
+                        )
+    
+for j in range(i+1, len(axes)):
+    axes[j].set_visible(False)
+
+plt.savefig('plots/boxplots', dpi = 300)
+plt.show()
+
+    
