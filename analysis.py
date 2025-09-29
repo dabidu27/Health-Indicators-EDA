@@ -7,7 +7,7 @@ import numpy as np
 dataset = create_dataset()
 #print(dataset)
 
-"""
+
 #GRAPHICAL PROJECTION OF THE DATA
 
 #barchart of life expectancy
@@ -207,7 +207,7 @@ for j in range(i+1, len(axes)):
 
 plt.savefig('plots/boxplots', dpi = 300)
 plt.show()
-"""
+
     
 #COVARIANCE AND COEFFICIENT OF CORRELATION
 
@@ -256,7 +256,7 @@ for i in range(len(corr_matrix.columns)):
             col1 = corr_matrix.columns[i]
             col2 = corr_matrix.columns[j]
             high_neg_corr_pairs.append((col1, col2, corr_value))
-            
+
 print('\n')
 print("Highly negatively correlated pairs (correlation >= {:.2f}):".format(threshold))
 for col1, col2, corr_value in high_neg_corr_pairs:
