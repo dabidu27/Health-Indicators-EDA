@@ -160,7 +160,7 @@ axes[1].set_title((f'The Relationship between {col1} and {col2}'), fontsize=8, w
 
 plt.savefig('plots/scatter_plots', dpi = 300)
 plt.show()
-"""
+
 
 #BOX PLOTS AND OUTLIERS
 
@@ -207,5 +207,57 @@ for j in range(i+1, len(axes)):
 
 plt.savefig('plots/boxplots', dpi = 300)
 plt.show()
-
+"""
     
+#COVARIANCE AND COEFFICIENT OF CORRELATION
+
+cols = dataset.select_dtypes(include='number')
+
+cov_matrix = cols.cov()
+print('Covariance matrix: ')
+print(cov_matrix)
+
+print('\n')
+
+corr_matrix = cols.corr()
+print('Correlation matrix: ')
+print(corr_matrix)
+
+plt.figure(figsize=(20, 15))
+sns.heatmap(corr_matrix, annot=True, fmt=".2f", cmap="coolwarm", cbar=True)
+plt.xticks(rotation = 10, fontsize = 5)
+plt.yticks(rotation = 10, fontsize = 5)
+
+plt.title("Correlation Matrix Heatmap", fontsize=14)
+plt.savefig('plots/correlation_matrix')
+plt.show()
+
+threshold = 0.5
+
+high_pos_corr_pairs = []
+for i in range(len(corr_matrix.columns)):
+    for j in range(i+1, len(corr_matrix.columns)):
+        corr_value = corr_matrix.iloc[i, j]
+        if corr_value >= threshold:
+            col1 = corr_matrix.columns[i]
+            col2 = corr_matrix.columns[j]
+            high_pos_corr_pairs.append((col1, col2, corr_value))
+
+print("Highly positively correlated pairs (correlation >= {:.2f}):".format(threshold))
+for col1, col2, corr_value in high_pos_corr_pairs:
+    print(f"{col1} & {col2}: correlation = {corr_value:.2f}")
+
+threshold = -0.5
+high_neg_corr_pairs = []
+for i in range(len(corr_matrix.columns)):
+    for j in range(i+1, len(corr_matrix.columns)):
+        corr_value = corr_matrix.iloc[i, j]
+        if corr_value <= threshold:
+            col1 = corr_matrix.columns[i]
+            col2 = corr_matrix.columns[j]
+            high_neg_corr_pairs.append((col1, col2, corr_value))
+            
+print('\n')
+print("Highly negatively correlated pairs (correlation >= {:.2f}):".format(threshold))
+for col1, col2, corr_value in high_neg_corr_pairs:
+    print(f"{col1} & {col2}: correlation = {corr_value:.2f}")
